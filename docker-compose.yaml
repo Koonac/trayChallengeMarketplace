@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    volumes:
+      - ./:/var/www/html/trayChallengeMarketplace
+    working_dir: /var/www/html/trayChallengeMarketplace
+    networks:
+      - laravel-network
+    ports:
+      - "8080:80" 
+
+  db:
+    image: mysql:5.7
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel-network
+
+  mockoon:
+    image: mockoon/cli:latest
+    container_name: mockoon_server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./mocketplace.json:/data
+    command: -d /data -p 3000
+    networks:
+      - laravel-network
+
+volumes:
+  db_data:
+
+networks:
+  laravel-network:
