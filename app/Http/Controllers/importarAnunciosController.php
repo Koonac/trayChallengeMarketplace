@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\ImportarAnunciosJob;
 use Illuminate\Http\Request;
 
-class importarAnunciosController extends Controller
+class ImportarAnunciosController extends Controller
 {
     public function importarAnuncios(Request $request){
 

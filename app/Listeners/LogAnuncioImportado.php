@@ -24,6 +24,6 @@ class LogAnuncioImportado
     {
         $codAnuncio = $event->codAnuncio;
 
-        Log::info("Anúncio #{$codAnuncio} importado e enviado ao HUB.");
+        Log::info("Anúncio #{$codAnuncio} importado e enviado ao HUB.\n\n");
     }
 }

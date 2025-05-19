@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\importarAnunciosController;
+use App\Http\Controllers\ImportarAnunciosController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/importarAnuncios', [importarAnunciosController::class, 'importarAnuncios']);
+Route::post('/importarAnuncios', [ImportarAnunciosController::class, 'importarAnuncios']);
