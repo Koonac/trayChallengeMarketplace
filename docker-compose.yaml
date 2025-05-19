@@ -7,10 +7,23 @@ services:
     volumes:
       - ./:/var/www/html/trayChallengeMarketplace
     working_dir: /var/www/html/trayChallengeMarketplace
+    depends_on:
+      - mysql
     networks:
       - laravel-network
     ports:
-      - "8080:80" 
+      - "8080:80"
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql_server
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=marketplace_connector
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - laravel-network
 
   mockoon:
     image: mockoon/cli:latest
@@ -25,7 +38,7 @@ services:
 
   redis:
     image: redis:latest
-    container_name: redis
+    container_name: redis_server
     ports:
       - "6379:6379"
     networks:
