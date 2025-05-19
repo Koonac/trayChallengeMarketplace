@@ -1,11 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\importarAnunciosController;
 use Illuminate\Support\Facades\Route;
 
-/* MARKETPLACES */
-Route::prefix('mocketplace')->group(function (){
-    Route::get('/importarAnuncios', function (Request $request) {
-        return ['status' => 'success'];
-    });
-});
+Route::post('/importarAnuncios', [importarAnunciosController::class, 'importarAnuncios']);
