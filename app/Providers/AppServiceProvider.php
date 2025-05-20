@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Interfaces\HubRepositoryInterface;
-use App\Interfaces\MarketplaceRepositoryInterface;
 use App\Repositories\HubRepository;
-use App\Repositories\MocketplaceRepository;
+use App\Repositories\MarketplaceRepository;
+use App\UseCases\Contracts\Repositories\IHubRepositoryInterface;
+use App\UseCases\Contracts\Repositories\IMarketplaceRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,8 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(MarketplaceRepositoryInterface::class, MocketplaceRepository::class);
-        $this->app->bind(HubRepositoryInterface::class, HubRepository::class);
+        $this->app->bind(IMarketplaceRepositoryInterface::class, MarketplaceRepository::class);
+        $this->app->bind(IHubRepositoryInterface::class, HubRepository::class);
     }
 
     /**

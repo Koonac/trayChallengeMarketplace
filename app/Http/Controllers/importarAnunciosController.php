@@ -3,25 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ImportarAnunciosJob;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ImportarAnunciosController extends Controller
 {
-    public function importarAnuncios(Request $request){
-
+    /**
+     * Importa os anúncios de um marketplace.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function importarAnuncios(Request $request): JsonResponse
+    {
         try {
-            $marketplace = $request->query('marketplace');
-    
-            if (!$marketplace) return response()->json(['error' => 'Parâmetro "marketplace" é obrigatório.'], 400);
-    
             /* ADICIONADNO JOB */
-            ImportarAnunciosJob::dispatch($marketplace);
-    
+            ImportarAnunciosJob::dispatch();
+
             /* RESPOSTA API */
             return response()->json(
                 [
                     'status' => true,
-                    'message' => 'Importação agendada com sucesso. Marketplace: ' . $marketplace
+                    'message' => 'Importação agendada com sucesso.'
                 ]
             );
         } catch (\Exception $e) {

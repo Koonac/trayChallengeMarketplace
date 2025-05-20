@@ -1,18 +1,19 @@
 <?php
+
 namespace App\States;
 
-use App\Interfaces\HubRepositoryInterface;
-use App\Interfaces\MarketplaceRepositoryInterface;
-use App\Models\StatusImportacaoAnuncio;
+use App\Repositories\Models\StatusImportacaoAnuncio;
+use App\UseCases\Contracts\Repositories\IHubRepositoryInterface;
+use App\UseCases\Contracts\Repositories\IMarketplaceRepositoryInterface;
 
 abstract class StatusImportacao
 {
 
     public function __construct(
         protected StatusImportacaoAnuncio $statusImportacaoAnuncio,
-        protected MarketplaceRepositoryInterface $marketplace,
-        protected HubRepositoryInterface $hub,
-    ){}
+        protected IMarketplaceRepositoryInterface $marketplace,
+        protected IHubRepositoryInterface $hub,
+    ) {}
 
     abstract public function handle(): StatusImportacao;
 }

@@ -2,14 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\MarketplaceRepositoryInterface;
+use App\Entities\Anuncio;
+use App\Entities\Imagem;
+use App\Entities\Preco;
+use App\UseCases\Contracts\Repositories\IMarketplaceRepositoryInterface;
 use Illuminate\Support\Facades\Http;
+
 /**
  * Repositório de anúncios para o 'Mocketplace'.
  *
  * Implementa a interface de comunicação com o 'Mocketplace'.
  */
-class MocketplaceRepository implements MarketplaceRepositoryInterface
+class MarketplaceRepository implements IMarketplaceRepositoryInterface
 {
     private string $baseUrl;
 
@@ -31,7 +35,7 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
         $retorno = [];
 
         /* TRATANDO RETORNO */
-        if(count($response['data']['offers']) > 0) {
+        if (count($response['data']['offers']) > 0) {
             foreach ($response['data']['offers'] as $codAnuncio) {
                 $retorno[] = ['codAnuncio' => $codAnuncio];
             }
@@ -44,9 +48,9 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
      * Captura informações do anúncios
      *
      * @param string $id Código do anúncio
-     * @return array InformaçÕes do anúncio
+     * @return Anuncio InformaçÕes do anúncio
      */
-    public function getInfoAnuncio(string $id): array
+    public function getInfoAnuncio(string $id): Anuncio
     {
         $response = Http::get("{$this->baseUrl}/offers/{$id}")->json();
 
@@ -62,7 +66,7 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
      * @param string $id Código do anúncio
      * @return array Urls de imagens do anúncio
      */
-    public function getImagensAnuncio(string $id): array
+    public function getImagensAnuncio(string $id): Imagem
     {
         $response = Http::get("{$this->baseUrl}/offers/{$id}/images")->json();
 
@@ -78,10 +82,10 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
      * @param string $id Código do anúncio
      * @return array Preços do anúncio
      */
-    public function getPrecosAnuncio(string $id): array
+    public function getPrecosAnuncio(string $id): Preco
     {
         $response = Http::get("{$this->baseUrl}/offers/{$id}/prices")->json();
-        
+
         /* TRATANDO RETORNO */
         $retorno = $response['data'];
 

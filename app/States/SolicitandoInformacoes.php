@@ -1,6 +1,7 @@
 <?php
 namespace App\States;
 
+use App\Entities\Anuncio;
 class SolicitandoInformacoes extends StatusImportacao
 {
     public function handle(): StatusImportacao
@@ -14,18 +15,17 @@ class SolicitandoInformacoes extends StatusImportacao
         $precosAnuncio  = $this->marketplace->getPrecosAnuncio($codAnuncio);
 
         /* MONTANDO PAYLOAD */
-        $payload = [
+        $anuncio = new Anuncio([
             'title'         => $infoAnuncio['title'], 
             'description'   => $infoAnuncio['description'], 
             'status'        => $infoAnuncio['status'], 
             'stock'         => $infoAnuncio['stock'],
-            'images'        => $imagensAnuncio['images'],
-            'price'         => $precosAnuncio['price'],
-        ];
+            'images'        => $imagensAnuncio,
+            'price'         => $precosAnuncio,
+        ]);
 
-    
         /* SALVANDO PAYLOAD */
-        $this->statusImportacaoAnuncio->update(['payload' => $payload]);
+        $this->statusImportacaoAnuncio->update(['payload' => $anuncio]);
 
         return new EnviandoParaHub($this->statusImportacaoAnuncio, $this->marketplace, $this->hub);
     }

@@ -2,14 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\HubRepositoryInterface;
+use App\Entities\Anuncio;
+use App\UseCases\Contracts\Repositories\IHubRepositoryInterface;
 use Illuminate\Support\Facades\Http;
+
 /**
  * Repositório de hub para o 'Hub'.
  *
  * Implementa a interface de comunicação com o 'Hub'.
  */
-class HubRepository implements HubRepositoryInterface
+class HubRepository implements IHubRepositoryInterface
 {
     private string $baseUrl;
 
@@ -22,11 +24,11 @@ class HubRepository implements HubRepositoryInterface
     /**
      * Cadastra o anúncio no hub
      *
-     * @param array $payload Payload de envio
+     * @param Anuncio $anuncio anúncio para envio
      * @return void
      */
-    public function enviarAnuncio(array $payload): void
+    public function enviarAnuncio(Anuncio $anuncio): void
     {
-        Http::post("{$this->baseUrl}/hub/create-offer", $payload);
+        Http::post("{$this->baseUrl}/hub/create-offer", $anuncio);
     }
 }

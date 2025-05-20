@@ -1,14 +1,16 @@
 <?php
-namespace App\UseCases;
 
-use App\Interfaces\HubRepositoryInterface;
-use App\Interfaces\MarketplaceRepositoryInterface;
-use App\Models\StatusImportacaoAnuncio;
+namespace App\UseCases\Anuncio;
+
+
+use App\Repositories\Models\StatusImportacaoAnuncio;
 use App\States\Concluido;
 use App\States\EnviandoParaHub;
 use App\States\Falhou;
 use App\States\ImportacaoPendente;
 use App\States\SolicitandoInformacoes;
+use App\UseCases\Contracts\Repositories\IHubRepositoryInterface;
+use App\UseCases\Contracts\Repositories\IMarketplaceRepositoryInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -16,14 +18,14 @@ use Illuminate\Support\Facades\Log;
  * Regras de negócio para importação de anúncios do marketplace para o hub.
  *
  */
-class ImportarAnunciosUseCase
+class ImportarAnuncios
 {
-    private MarketplaceRepositoryInterface $marketplaceRepo;
-    private HubRepositoryInterface $hubRepo;
+    private IMarketplaceRepositoryInterface $marketplaceRepo;
+    private IHubRepositoryInterface $hubRepo;
 
     public function __construct(
-        MarketplaceRepositoryInterface $marketplaceRepo,
-        HubRepositoryInterface $hubRepo
+        IMarketplaceRepositoryInterface $marketplaceRepo,
+        IHubRepositoryInterface $hubRepo
     ) {
         $this->marketplaceRepo = $marketplaceRepo;
         $this->hubRepo = $hubRepo;
@@ -44,11 +46,11 @@ class ImportarAnunciosUseCase
             'enviando_para_hub'          => EnviandoParaHub::class,
         ];
 
-        while($iteraLaco){
+        while ($iteraLaco) {
             /* CAPTURANDO ANÚNCIOS */
             $anuncios = $this->marketplaceRepo->getAnuncios($page);
 
-            if(count($anuncios) > 0){
+            if (count($anuncios) > 0) {
                 foreach ($anuncios as $anuncio) {
                     try {
                         $codAnuncio = $anuncio['codAnuncio'];
@@ -71,15 +73,14 @@ class ImportarAnunciosUseCase
                         while (($importacaoAnuncio->status != 'concluido') && ($importacaoAnuncio->status != 'falhou')) {
                             $status = $status->handle();
                         }
-
-                    }catch(\Exception $e){
+                    } catch (\Exception $e) {
                         $iteraLaco = false;
                         $statusFalhou = new Falhou($importacaoAnuncio, $this->marketplaceRepo, $this->hubRepo);
                         $statusFalhou->handle();
                         Log::error('[ImportarAnunciosUseCase] Erro ao importar anúncio: ' . $e->getMessage());
                     }
                 }
-            }else{
+            } else {
                 $iteraLaco = false;
             }
 
