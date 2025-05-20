@@ -96,3 +96,20 @@ POST /api/importarAnuncios?marketplace=mocketplace
 | Nome          | Tipo   | Obrigatório | Descrição                                     |
 | ------------- | ------ | ----------- | --------------------------------------------- |
 | `marketplace` | string | ✅ Sim       | Identificador do marketplace a ser importado. (Padrão: `mocketplace`) |
+
+### ⚙️ O que acontece por trás da requisição?
+Quando você faz uma requisição para o endpoint `/api/importarAnuncios`, o seguinte fluxo é executado:
+
+1. O **Controller** recebe o parâmetro `marketplace` e despacha um job assíncrono para a fila.
+2. O Job (`ImportarAnunciosJob`) executa a lógica de importação via Use Case (`ImportarAnunciosUseCase`), resolvendo dinamicamente o repositório correto com base no marketplace.
+3. O **Use Case** busca os anúncios paginados da API mock e, para cada oferta, cria ou atualiza um registro de importação (`status_importacao_anuncios`), que armazena o estado atual da importação.
+4. Cada oferta é processada por uma máquina de estados (State Pattern), que executa passo a passo:
+    - `importacao_pendente` → início da importação
+    - `solicitando_informacoes` → coleta de dados, imagens e preços
+    - `enviando_para_hub` → envio para o HUB
+    - `concluido` → finalização com sucesso
+    - `falhou` → ocorreu algum erro
+  
+
+
+
