@@ -4,7 +4,11 @@ namespace App\Repositories;
 
 use App\Interfaces\MarketplaceRepositoryInterface;
 use Illuminate\Support\Facades\Http;
-
+/**
+ * Repositório de anúncios para o 'Mocketplace'.
+ *
+ * Implementa a interface de comunicação com o 'Mocketplace'.
+ */
 class MocketplaceRepository implements MarketplaceRepositoryInterface
 {
     private string $baseUrl;
@@ -15,7 +19,12 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
         $this->baseUrl = 'http://mockoon_server:3000';
     }
 
-
+    /**
+     * Retorna a lista de anúncios
+     *
+     * @param int $page Página para listar os anúncios
+     * @return array Lista de anúncios
+     */
     public function getAnuncios(int $page): array
     {
         $response = Http::get("{$this->baseUrl}/offers", ['page' => $page])->json();
@@ -31,6 +40,12 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
         return $retorno;
     }
 
+    /**
+     * Captura informações do anúncios
+     *
+     * @param string $id Código do anúncio
+     * @return array InformaçÕes do anúncio
+     */
     public function getInfoAnuncio(string $id): array
     {
         $response = Http::get("{$this->baseUrl}/offers/{$id}")->json();
@@ -41,6 +56,12 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
         return $retorno;
     }
 
+    /**
+     * Captura imagens do anúncios
+     *
+     * @param string $id Código do anúncio
+     * @return array Urls de imagens do anúncio
+     */
     public function getImagensAnuncio(string $id): array
     {
         $response = Http::get("{$this->baseUrl}/offers/{$id}/images")->json();
@@ -51,6 +72,12 @@ class MocketplaceRepository implements MarketplaceRepositoryInterface
         return $retorno;
     }
 
+    /**
+     * Captura preços do anúncios
+     *
+     * @param string $id Código do anúncio
+     * @return array Preços do anúncio
+     */
     public function getPrecosAnuncio(string $id): array
     {
         $response = Http::get("{$this->baseUrl}/offers/{$id}/prices")->json();

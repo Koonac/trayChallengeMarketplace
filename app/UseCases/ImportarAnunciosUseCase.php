@@ -12,6 +12,10 @@ use App\States\SolicitandoInformacoes;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Regras de negócio para importação de anúncios do marketplace para o hub.
+ *
+ */
 class ImportarAnunciosUseCase
 {
     private MarketplaceRepositoryInterface $marketplaceRepo;
@@ -25,6 +29,11 @@ class ImportarAnunciosUseCase
         $this->hubRepo = $hubRepo;
     }
 
+    /**
+     * Executa as regras de negócio.
+     * 
+     * @return void
+     */
     public function executar(): void
     {
         $page = 1;
@@ -43,7 +52,6 @@ class ImportarAnunciosUseCase
                 foreach ($anuncios as $anuncio) {
                     try {
                         $codAnuncio = $anuncio['codAnuncio'];
-                        $iteraLacoStatus = true;
 
                         /* CAPTURANDO STATUS DE IMPORTAÇÃO */
                         $importacaoAnuncio = StatusImportacaoAnuncio::firstOrCreate([
