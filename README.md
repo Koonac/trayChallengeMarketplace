@@ -16,13 +16,12 @@ Este projeto tem como objetivo implementar um conector entre marketplaces e um H
 
 ## 🧱 Tecnologias utilizadas
 
-- [Laravel](https://laravel.com/) 10+
-- Docker + Laravel Sail
-- Redis (fila)
-- Guzzle (HTTP Client)
-- MySQL/PostgreSQL
-- PHP 8.1+
-- Clean Architecture + SOLID principles
+- [Laravel](https://laravel.com/) 11+
+- Docker + docker-compose
+- Redis
+- MySQL
+- PHP 8.2
+- Clean Architecture + princípios SOLID
 
 ---
 
@@ -83,3 +82,17 @@ composer install
 # Rodando migrations
 php artisan migrate
 ```
+
+---
+
+## 📥 Como usar a API e seu funcionamento
+
+### 📬 Endpoint principal
+```http
+POST /api/importarAnuncios?marketplace=mocketplace
+```
+
+### 🔗 Parâmetros da requisição
+| Nome          | Tipo   | Obrigatório | Descrição                                     |
+| ------------- | ------ | ----------- | --------------------------------------------- |
+| `marketplace` | string | ✅ Sim       | Identificador do marketplace a ser importado. (Padrão: `mocketplace`) |
