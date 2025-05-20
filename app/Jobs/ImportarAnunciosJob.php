@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Interfaces\HubRepositoryInterface;
+use App\Resolvers\MarketplaceRepositoryResolver;
 use App\UseCases\ImportarAnunciosUseCase;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,16 +14,20 @@ class ImportarAnunciosJob implements ShouldQueue
 {
     use Dispatchable, Queueable;
 
-    public function __construct()
+    public function __construct(private string $marketplace)
     {
     }
 
-    public function handle(ImportarAnunciosUseCase $importarAnunciosUseCase): void
+    public function handle(HubRepositoryInterface $hubRepo): void
     {
         try {
+            /* ESCOLHENDO O MARKETPLACE REPOSITORY */
+            $marketplaceRepo = MarketplaceRepositoryResolver::resolve($this->marketplace);
+
             Log::info('[ImportarAnunciosJob] Iniciando importação...');
 
-            $importarAnunciosUseCase->executar();
+            $useCase = new ImportarAnunciosUseCase($marketplaceRepo, $hubRepo);
+            $useCase->executar();
 
             Log::info('[ImportarAnunciosJob] Importação finalizada com sucesso.');
 

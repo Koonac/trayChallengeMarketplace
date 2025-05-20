@@ -60,10 +60,8 @@ class ImportarAnunciosUseCase
                         $status = new $statusImportacaoClass($importacaoAnuncio, $this->marketplaceRepo, $this->hubRepo);
 
                         /* PERCORRENDO CADA STATUS ATÉ SER 'CONCLUIDO' */
-                        while ($iteraLacoStatus) {
+                        while (($importacaoAnuncio->status != 'concluido') && ($importacaoAnuncio->status != 'falhou')) {
                             $status = $status->handle();
-
-                            if(!($status instanceof Concluido)) $iteraLacoStatus = false;
                         }
 
                     }catch(\Exception $e){
