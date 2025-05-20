@@ -27,4 +27,12 @@ Este projeto tem como objetivo implementar um conector entre marketplaces e um H
 ---
 
 ## 📁 Estrutura de Pastas
-
+- app/
+    - Events/ & Listeners/ # Eventos para disparo (ex: AnuncioImportado)
+    - Interfaces/ # Interfaces dos repositórios
+    - Jobs/ # Job principal para execução da importação
+    - Repositories/ # Implementações por marketplace
+    - Resolvers/ # Service Resolver para marketplace dinâmico
+    - States/ # Estados do processo de importação
+    - UseCases/ # Lógica de aplicação (ImportarAnunciosUseCase)
+- mocketplace.json # Mock para testes API 
