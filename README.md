@@ -9,8 +9,6 @@ Este projeto tem como objetivo implementar um conector entre marketplaces e um H
 - 📤 Envio dos anúncios para um HUB de integração
 - ⚙️ Processamento assíncrono com Laravel Queues (Redis)
 - 📄 Armazenamento e rastreamento de status da importação por oferta
-- ♻️ Implementação do **State Pattern** para controle de fluxo
-- 🔌 Suporte a múltiplos Marketplaces com injeção dinâmica de repositórios
 
 ---
 
@@ -22,20 +20,6 @@ Este projeto tem como objetivo implementar um conector entre marketplaces e um H
 - MySQL
 - PHP 8.2
 - Clean Architecture + princípios SOLID
-
----
-
-## 📁 Estrutura de Pastas
-
-- app/
-    - Events/ & Listeners/ # Eventos para disparo (ex: AnuncioImportado)
-    - Interfaces/ # Interfaces dos repositórios
-    - Jobs/ # Job principal para execução da importação
-    - Repositories/ # Implementações por marketplace
-    - Resolvers/ # Service Resolver para marketplace dinâmico
-    - States/ # Estados do processo de importação
-    - UseCase/ # Lógica de aplicação (ImportarAnunciosUseCase)
-- mocketplace.json # Mock para testes API 
 
 ---
 
@@ -87,28 +71,33 @@ php artisan migrate
 
 ## 📥 Como usar a API e seu funcionamento
 
-### 📬 Endpoint principal
-```http
-POST /api/importarAnuncios?marketplace=mocketplace
+### 👷 Iniciar o worker
+Acesse o container da aplicação:
+```bash
+# Acessando container
+docker exec -it app bash
+
+# Rodando migrations
+php artisan queue:work
 ```
 
-### 🔗 Parâmetros da requisição
-| Nome          | Tipo   | Obrigatório | Descrição                                     |
-| ------------- | ------ | ----------- | --------------------------------------------- |
-| `marketplace` | string | ✅ Sim       | Identificador do marketplace a ser importado. (Padrão: `mocketplace`) |
+### 📬 Endpoint principal
+```http
+POST /api/importar-anuncios
+```
 
 ### ⚙️ O que acontece por trás da requisição?
-Quando você faz uma requisição para o endpoint `/api/importarAnuncios`, o seguinte fluxo é executado:
+Quando você faz uma requisição para o endpoint `/api/importar-anuncios`, o seguinte fluxo é executado:
 
-1. O **Controller** recebe o parâmetro `marketplace` e despacha um job assíncrono para a fila.
-2. O Job (`ImportarAnunciosJob`) executa a lógica de importação via Use Case (`ImportarAnunciosUseCase`), resolvendo dinamicamente o repositório correto com base no marketplace.
-3. O **Use Case** busca os anúncios paginados da API mock e, para cada oferta, cria ou atualiza um registro de importação (`status_importacao_anuncios`), que armazena o estado atual da importação.
-4. Cada oferta é processada por uma máquina de estados (State Pattern), que executa passo a passo:
-    - `importacao_pendente` → início da importação
-    - `solicitando_informacoes` → coleta de dados, imagens e preços
-    - `enviando_para_hub` → envio para o HUB
-    - `concluido` → finalização com sucesso
-    - `falhou` → ocorreu algum erro
+1. O **Controller** recebe a requisição e despacha um job assíncrono para a fila.
+2. O Job (`ProcessOfferListJob`) executa a lógica de listagem via Use Case, e para cada registro dispara o evento (`OfferProcessed`) para ser adicionado na próxima fila (`ProcessOfferImportJob`).
+3. O job (`ProcessOfferImportJob`) executa a lógica de importação da oferta via Use Case, e dispara o envento (`OfferImported`) para ser adicionado a próxima fica (`ProcessOfferSendHubJob`).
+4. O job (`ProcessOfferSendHubJob`) executa a lógica de envio para o hub via Use Case.
+5. Cada oferta tem seu status de importação armazenado no banco para caso o processo falhe, possa ser retomado de onde parou:
+    - `processing` → processando para importação
+    - `imported` → anúncio importado
+    - `completed` → envio para o HUB
+    - `failed` → falhou em alguma processo
   
 
 
