@@ -13,12 +13,4 @@ interface IStatusImportParser
      * @return void
      */
     public function dispatchStatusEvent(string $currentStep, array $params): void;
-
-    /**
-     * Retorna o próximo status
-     * 
-     * @param string $step
-     * @return string
-     */
-    public function nextStep(string $step): string;
 }

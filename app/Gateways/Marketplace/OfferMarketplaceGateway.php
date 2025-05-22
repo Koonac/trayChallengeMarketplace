@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Gateways\Offer;
+namespace App\Gateways\Marketplace;
 
 use App\Entities\Offer;
 use App\Entities\OfferReference;
-use App\UseCase\Contracts\Gateways\{IHttpClient, IOfferGateway};
+use App\UseCase\Contracts\Gateways\{IHttpClient, IOfferMarketplaceGateway};
 
 use Exception;
 
-class OfferGateway implements IOfferGateway
+class OfferMarketplaceGateway implements IOfferMarketplaceGateway
 {
     /**
-     * URL base para consulta de anúncios
+     * URL base para o marketplace
      *
      * @var string $baseUrl
      */

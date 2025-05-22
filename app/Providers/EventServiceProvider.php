@@ -4,10 +4,8 @@ namespace App\Providers;
 
 use App\Events\OfferImported;
 use App\Events\OfferProcessed;
-use App\Events\OfferSended;
 use App\Listeners\OnOfferImported;
 use App\Listeners\OnOfferProcessed;
-use App\Listeners\OnOfferSended;
 use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -34,9 +32,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         OfferImported::class => [
             OnOfferImported::class,
-        ],
-        OfferSended::class => [
-            OnOfferSended::class,
-        ],
+        ]
     ];
 }

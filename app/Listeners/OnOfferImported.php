@@ -18,8 +18,6 @@ class OnOfferImported
     {
         $ref = $event->getOfferRef();
 
-        Logger('Hora de criar o job para enviarrr', ['ref' => $ref]);
-
-        // ProcessOfferSendHubJob::dispatch($ref);
+        ProcessOfferSendHubJob::dispatch($ref);
     }
 }

@@ -4,7 +4,7 @@ namespace App\UseCase\Offer;
 
 use App\Entities\Offer;
 use App\Events\OfferProcessed;
-use App\UseCase\Contracts\Gateways\IOfferGateway;
+use App\UseCase\Contracts\Gateways\IOfferMarketplaceGateway;
 use App\UseCase\Contracts\Offer\IOfferMarketplace;
 use App\UseCase\Contracts\Repositories\IStatusImportRepository;
 use App\UseCase\Contracts\StatusImport\IStatusImportParser;
@@ -15,18 +15,18 @@ class OfferMarketplace implements IOfferMarketplace
     /**
      * Gateway de anúncios do marketplace
      * 
-     * @var IOfferGateway $offerGateway
+     * @var IOfferMarketplaceGateway $offerMarketplaceGateway
      */
-    protected IOfferGateway $offerGateway;
+    protected IOfferMarketplaceGateway $offerMarketplaceGateway;
 
     /**
      * OfferMarketplace constructor
      * 
-     * @param IOfferGateway $offerGateway
+     * @param IOfferMarketplaceGateway $offerMarketplaceGateway
      */
-    public function __construct(IOfferGateway $offerGateway)
+    public function __construct(IOfferMarketplaceGateway $offerMarketplaceGateway)
     {
-        $this->offerGateway =  $offerGateway;
+        $this->offerMarketplaceGateway =  $offerMarketplaceGateway;
     }
 
     /**
@@ -36,7 +36,7 @@ class OfferMarketplace implements IOfferMarketplace
     {
         $page = 1;
         do {
-            $offers = $this->offerGateway->all($page);
+            $offers = $this->offerMarketplaceGateway->all($page);
 
             if (!$offers) break;
 
@@ -53,9 +53,9 @@ class OfferMarketplace implements IOfferMarketplace
                     fn(IStatusImportParser $importParser) => $importParser->dispatchStatusEvent($statusImport->current_step, [$ref])
                 );
 
-                Log::info('[listOffersAndDispatch]Anúncio processado com sucesso', [
+                Log::info('[listOffersAndDispatch] Anúncio processado com sucesso', [
                     'reference' => $ref,
-                    'status_import' => $statusImport
+                    'current_step' => $statusImport->current_step
                 ]);
             }
 
@@ -68,6 +68,6 @@ class OfferMarketplace implements IOfferMarketplace
      */
     public function getOffer(string $ref): Offer
     {
-        return $this->offerGateway->find($ref);
+        return $this->offerMarketplaceGateway->find($ref);
     }
 }

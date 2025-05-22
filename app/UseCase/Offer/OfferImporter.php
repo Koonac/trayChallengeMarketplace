@@ -3,6 +3,7 @@
 namespace App\UseCase\Offer;
 
 use App\Entities\Offer;
+use App\UseCase\Contracts\Offer\IOfferFinder;
 use App\UseCase\Contracts\Repositories\IOfferRepository;
 use App\UseCase\Contracts\Offer\IOfferImporter;
 use App\UseCase\Contracts\Repositories\IStatusImportRepository;
@@ -33,7 +34,14 @@ class OfferImporter implements IOfferImporter
      */
     public function importAndDispatch(Offer $offer): ?Offer
     {
-        $offerCreated = $this->repository->create($offer->toArray());
+        $offerCreated = with(
+            app(IOfferFinder::class),
+            fn(IOfferFinder $finder) => $finder->findByRef($offer->reference)
+        );
+
+        if (!$offerCreated) {
+            $offerCreated = $this->repository->create($offer->toArray());
+        }
 
         if (!$offerCreated) {
             Log::error('[importAndDispatch] Falha na importação', [
@@ -55,7 +63,7 @@ class OfferImporter implements IOfferImporter
 
         Log::info('[importAndDispatch] Anúncio importado com sucesso', [
             'reference' => $offerCreated->reference,
-            'status_import' => $statusImport
+            'current_step' => $statusImport->current_step
         ]);
 
         return $offerCreated;

@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\UseCase\Contracts\Gateways\IOfferGateway;
 use App\UseCase\Contracts\Offer\IOfferImporter;
+use App\UseCase\Contracts\Offer\IOfferMarketplace;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -41,8 +41,8 @@ class ProcessOfferImportJob implements ShouldQueue
     {
         try {
             $offer = with(
-                app(IOfferGateway::class),
-                fn(IOfferGateway $gateway) => $gateway->find($this->ref)
+                app(IOfferMarketplace::class),
+                fn(IOfferMarketplace $marketplace) => $marketplace->getOffer($this->ref)
             );
 
             with(

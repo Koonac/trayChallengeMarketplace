@@ -23,7 +23,7 @@ class OfferParser implements IOfferParser
             'title'         => $offer->title,
             'description'   => $offer->description,
             'status'        => $offer->status,
-            'quantity'      => $offer->stock,
+            'stock'         => $offer->stock,
         ];
     }
 }

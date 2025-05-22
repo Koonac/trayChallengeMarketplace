@@ -6,7 +6,7 @@ use App\Entities\Offer;
 use App\Entities\OfferReference;
 use Exception;
 
-interface IOfferGateway
+interface IOfferMarketplaceGateway
 {
 
     /**

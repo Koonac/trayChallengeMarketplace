@@ -17,7 +17,6 @@ return new class extends Migration
             $table->enum('current_step', [
                 'processing',
                 'imported',
-                'sended',
                 'completed',
                 'failed'
             ])->default('processing');

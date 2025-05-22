@@ -17,23 +17,11 @@ class StatusImportParser implements IStatusImportParser
     public function dispatchStatusEvent($currentStep, $params): void
     {
         match ($currentStep) {
-            'processing'   => OfferProcessed::dispatch(...$params),
-            'imported'     => OfferImported::dispatch(...$params),
-            'sended'       => OfferSended::dispatch(...$params),
-            default        => throw new InvalidArgumentException("Status inválido: {$currentStep}"),
-        };
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function nextStep(string $step): string
-    {
-        return match ($step) {
-            'processing'   => 'imported',
-            'imported'     => 'sended',
-            'sended'       => 'completed',
-            default        => throw new InvalidArgumentException("Status inválido: {$step}"),
+            'processing'    => OfferProcessed::dispatch(...$params),
+            'imported'      => OfferImported::dispatch(...$params),
+            'completed'     => null,
+            'failed'        => null,
+            default         => throw new InvalidArgumentException("Status inválido: {$currentStep}"),
         };
     }
 }
