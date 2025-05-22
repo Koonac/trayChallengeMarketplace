@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Entities\Enums\CurrentStepStatusImport;
 use App\Entities\StatusImport;
 use App\Repositories\Models\StatusImportModel;
-use App\UseCases\Contracts\Repositories\IStatusImport;
+use App\UseCase\Contracts\Repositories\IStatusImportRepository;
 
-class StatusImportRepository implements IStatusImport
+class StatusImportRepository implements IStatusImportRepository
 {
     /**
      * O modelo do status de importação
@@ -17,19 +16,44 @@ class StatusImportRepository implements IStatusImport
     protected ?StatusImportModel $model = null;
 
     /**
-     * Retorna o model
-     *
-     * @return StatusImportModel
+     * @inheritDoc
      */
-    public function save(string $ref, CurrentStepStatusImport $currentStep): StatusImport
+    public function findByRef(string $ref): ?StatusImport
+    {
+        $statusImport = $this->getModel()->where('reference', $ref)->first();
+        if (!$statusImport) {
+            return null;
+        }
+
+        return $this->toEntity($statusImport);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save(string $ref): StatusImport
     {
         $statusImport = $this->getModel()->where('reference', $ref)->first();
         if (!$statusImport) {
             $statusImport = $this->getModel()->create([
                 'reference' => $ref,
-                'current_step' => $currentStep,
+                'current_step' => 'processing',
             ]);
         }
+        return $this->toEntity($statusImport);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function transitionTo(string $ref, string $step): ?StatusImport
+    {
+        $statusImport = $this->getModel()->where('reference', $ref)->first();
+        if (!$statusImport) {
+            return null;
+        }
+
+        $statusImport->update(['current_step' => $step]);
         return $this->toEntity($statusImport);
     }
 

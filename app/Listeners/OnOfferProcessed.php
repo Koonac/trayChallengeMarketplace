@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OfferProcessed;
+use App\Jobs\ProcessOfferImportJob;
 
 class OnOfferProcessed
 {
@@ -14,6 +15,8 @@ class OnOfferProcessed
      */
     public function handle(OfferProcessed $event): void
     {
-        //
+        $ref = $event->getOfferRef();
+
+        ProcessOfferImportJob::dispatch($ref);
     }
 }

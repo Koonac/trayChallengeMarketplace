@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UseCases\Contracts\Offer;
+namespace App\UseCase\Contracts\Offer;
 
 use App\Entities\Offer;
 

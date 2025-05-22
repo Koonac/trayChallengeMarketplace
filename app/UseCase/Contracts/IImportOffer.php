@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UseCases\Contracts;
+namespace App\UseCase\Contracts;
 
 interface IImportOffer
 {

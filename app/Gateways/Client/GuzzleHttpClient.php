@@ -2,7 +2,7 @@
 
 namespace App\Gateways\Client;
 
-use App\UseCases\Contracts\Gateways\IHttpClient;
+use App\UseCase\Contracts\Gateways\IHttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;

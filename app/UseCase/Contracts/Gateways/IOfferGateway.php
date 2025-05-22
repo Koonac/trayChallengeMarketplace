@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UseCases\Contracts\Gateways;
+namespace App\UseCase\Contracts\Gateways;
 
 use App\Entities\Offer;
 use App\Entities\OfferReference;

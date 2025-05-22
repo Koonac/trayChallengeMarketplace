@@ -1,9 +1,8 @@
 <?php
 
-namespace App\UseCases\Contracts\Offer;
+namespace App\UseCase\Contracts\Offer;
 
 use App\Entities\Offer;
-use App\Entities\OfferReference;
 
 interface IOfferMarketplace
 {
@@ -13,7 +12,7 @@ interface IOfferMarketplace
      * 
      * @return void
      */
-    public function listOffers(): void;
+    public function listOffersAndDispatch(): void;
 
     /**
      * Busca um anúncio no marketplace

@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\UseCases\Contracts\Offer\IOfferMarketplace;
+use App\UseCase\Contracts\Offer\IOfferMarketplace;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,7 +31,7 @@ class ProcessOfferListJob implements ShouldQueue
         try {
             with(
                 app(IOfferMarketplace::class),
-                fn(IOfferMarketplace $marketplace) => $marketplace->listOffers()
+                fn(IOfferMarketplace $marketplace) => $marketplace->listOffersAndDispatch()
             );
         } catch (Exception $e) {
             Log::error('[ProcessOfferListJob] Erro ao listar ofertas.', [

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\UseCases\Offer;
+namespace App\UseCase\Offer;
 
 use App\Entities\Offer;
-use App\UseCases\Contracts\Gateways\IOfferGateway;
-use App\UseCases\Contracts\Offer\IOfferSender;
+use App\UseCase\Contracts\Gateways\IOfferGateway;
+use App\UseCase\Contracts\Offer\IOfferSender;
 
 class OfferSender implements IOfferSender
 {

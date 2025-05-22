@@ -1,9 +1,10 @@
 <?php
 
-namespace App\UseCases;
+namespace App\UseCase;
 
 use App\Jobs\ProcessOfferListJob;
-use App\UseCases\Contracts\IImportOffer;
+use App\UseCase\Contracts\IImportOffer;
+use Illuminate\Support\Facades\Log;
 
 class ImportOffer implements IImportOffer
 {
@@ -13,6 +14,8 @@ class ImportOffer implements IImportOffer
      */
     public function execute(): void
     {
+        Log::info('[ImportOffer] Iniciando importação...');
+
         ProcessOfferListJob::dispatch();
     }
 }

@@ -4,7 +4,7 @@ namespace App\Gateways\Offer;
 
 use App\Entities\Offer;
 use App\Entities\OfferReference;
-use App\UseCases\Contracts\Gateways\{IHttpClient, IOfferGateway};
+use App\UseCase\Contracts\Gateways\{IHttpClient, IOfferGateway};
 
 use Exception;
 

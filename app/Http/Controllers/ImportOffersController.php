@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\UseCases\Contracts\IImportOffer;
+use App\UseCase\Contracts\IImportOffer;
 use Illuminate\Http\JsonResponse;
 
 class ImportOffersController extends Controller

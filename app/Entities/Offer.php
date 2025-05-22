@@ -27,13 +27,17 @@ class Offer
         $this->images         = $attributes['images']         ?? null;
     }
 
-    public function toHub(): array
+    public function toArray(): array
     {
         return [
+            'id'            => $this->id,
+            'reference'     => $this->reference,
             'title'         => $this->title,
             'description'   => $this->description,
             'status'        => $this->status,
-            'quantity'      => $this->stock,
+            'stock'         => $this->stock,
+            'price'         => $this->price,
+            'images'        => $this->images,
         ];
     }
 }

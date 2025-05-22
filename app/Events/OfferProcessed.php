@@ -2,35 +2,36 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
 class OfferProcessed
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
 
     /**
-     * Create a new event instance.
+     * O código de referência da oferta
+     * 
+     * @var string $ref
      */
-    public function __construct()
+    protected string $ref;
+
+    /**
+     * OfferProcessed constructor
+     * 
+     * @param string $ref
+     */
+    public function __construct(string $ref)
     {
-        //
+        $this->ref = $ref;
     }
 
     /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
+     * Retorna o código de referência da oferta
+     * 
+     * @param string $ref
      */
-    public function broadcastOn(): array
+    public function getOfferRef(): string
     {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
+        return $this->ref;
     }
 }
