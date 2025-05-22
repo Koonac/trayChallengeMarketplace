@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
-use App\Events\AnuncioImportado;
-use App\Listeners\LogAnuncioImportado;
+use App\Events\OfferImported;
+use App\Events\OfferProcessed;
+use App\Events\OfferSended;
+use App\Listeners\OnOfferImported;
+use App\Listeners\OnOfferProcessed;
+use App\Listeners\OnOfferSended;
 use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -25,8 +29,14 @@ class EventServiceProvider extends ServiceProvider
     }
 
     protected $listen = [
-        AnuncioImportado::class => [
-            LogAnuncioImportado::class,
+        OfferProcessed::class => [
+            OnOfferProcessed::class,
+        ],
+        OfferImported::class => [
+            OnOfferImported::class,
+        ],
+        OfferSended::class => [
+            OnOfferSended::class,
         ],
     ];
 }
