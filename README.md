@@ -89,15 +89,15 @@ POST /api/importar-anuncios
 ### ⚙️ O que acontece por trás da requisição?
 Quando você faz uma requisição para o endpoint `/api/importar-anuncios`, o seguinte fluxo é executado:
 
-1. O **Controller** recebe a requisição e despacha um job assíncrono para a fila.
-2. O Job (`ProcessOfferListJob`) executa a lógica de listagem via Use Case, e para cada registro dispara o evento (`OfferProcessed`) para ser adicionado na próxima fila (`ProcessOfferImportJob`).
-3. O job (`ProcessOfferImportJob`) executa a lógica de importação da oferta via Use Case, e dispara o envento (`OfferImported`) para ser adicionado a próxima fica (`ProcessOfferSendHubJob`).
-4. O job (`ProcessOfferSendHubJob`) executa a lógica de envio para o hub via Use Case.
-5. Cada oferta tem seu status de importação armazenado no banco para caso o processo falhe, possa ser retomado de onde parou:
-    - `processing` → processando para importação
-    - `imported` → anúncio importado
-    - `completed` → envio para o HUB
-    - `failed` → falhou em alguma processo
+1. O **Controller** recebe a requisição e despacha um job (`ProcessOfferListJob`) para a fila, responsável por listar as ofertas do marketplace.
+2. Para cada oferta encontrada, o `ProcessOfferListJob` dispara o evento `OfferProcessed`, que agenda o próximo job na fila: `ProcessOfferImportJob`.
+3. O `ProcessOfferImportJob` executa a lógica de importação da oferta. Ao concluir, dispara o evento `OfferImported`, que encaminha a oferta para o próximo job: `ProcessOfferSendHubJob`.
+4. O `ProcessOfferSendHubJob` é responsável por enviar a oferta importada para a API do HUB, finalizando o ciclo.
+5. Durante todo o processo, o status de cada oferta é persistido no banco de dados, permitindo rastreabilidade e retomada em caso de falhas. Os possíveis estados são:
+    - `processing` → processamento em andamento
+    - `imported` → importação concluída
+    - `completed` → envio ao HUB finalizado
+    - `failed` → falha em alguma etapa da importação
   
 
 
